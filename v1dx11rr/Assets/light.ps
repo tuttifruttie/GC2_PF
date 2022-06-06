@@ -1,0 +1,65 @@
+////////////////////////////////////////////////////////////////////////////////
+// Filename: light.ps
+////////////////////////////////////////////////////////////////////////////////
+#version 400
+
+// INPUT VARIABLES //
+in vec2 texCoord;
+in vec3 normal;
+in vec3 tang;
+in vec3 binorm;
+
+// OUTPUT VARIABLES //
+out vec4 outputColor;
+
+// UNIFORM VARIABLES //
+uniform sampler2D blendTexture; // blendmap
+uniform sampler2D negroTexture; // zacate
+uniform sampler2D negroNormalTexture; // zacate normal
+uniform sampler2D rojoTexture; // tierra
+uniform sampler2D rojoNormalTexture; // tierra normal
+uniform sampler2D verdeTexture; // piedras
+uniform sampler2D verdeNormalTexture; // piedras normal
+
+uniform vec3 lightDirection;
+uniform vec4 diffuseLightColor;
+
+// Pixel Shader
+void main(void)
+{
+
+	vec4 blendTextureColor = texture(blendTexture, texCoord / 60);
+	vec4 negroTextureColor = texture(negroTexture, texCoord);
+	vec4 negroNormalTextureColor = texture(negroNormalTexture, texCoord);
+	vec4 rojoTextureColor = texture(rojoTexture, texCoord);
+	vec4 rojoNormalTextureColor = texture(rojoNormalTexture, texCoord);
+	vec4 verdeTextureColor = texture(verdeTexture, texCoord);
+	vec4 verdeNormalTextureColor = texture(verdeNormalTexture, texCoord);
+
+
+	vec4 textureColor = mix(negroTextureColor,rojoTextureColor,blendTextureColor.r);  //se pinta lo color negro y el color rojo 
+	textureColor = mix(textureColor,verdeTextureColor,blendTextureColor.g); //a lo anterior se le agrega lo verde ahora
+	vec4 normalColor = mix(negroNormalTextureColor,rojoNormalTextureColor,blendTextureColor.r); // se hace lo mismo pero con las normales
+	normalColor = mix(normalColor,verdeNormalTextureColor,blendTextureColor.g);
+
+	// matriz tbn
+	mat3 tbn = mat3(tang, binorm, normal);
+
+	normalColor = 2.0 * normalColor - 1.0f;
+	vec3 bumpNormal = tbn * vec3(normalColor);
+
+	vec3 lightDir = -lightDirection;
+
+	// aportacion ambiental
+	float factorAmbiental = 0.7f;
+	vec4 aportAmbiental = factorAmbiental * textureColor * diffuseLightColor;
+
+	// aportacion difusa (factor de la ley de lambert)
+	float factorDifusa = 5.0f;
+	float fall = clamp(dot(lightDir, bumpNormal), 0.0f, 1.0f);
+	vec4 aportDifusa = factorDifusa * textureColor * fall * diffuseLightColor;
+
+	// obtenemos color final
+	outputColor = textureColor * (aportAmbiental + aportDifusa);
+	// outputColor = normalColor;
+}

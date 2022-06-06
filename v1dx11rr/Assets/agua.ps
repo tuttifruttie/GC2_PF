@@ -1,0 +1,54 @@
+////////////////////////////////////////////////////////////////////////////////
+// Filename: agua.ps
+////////////////////////////////////////////////////////////////////////////////
+#version 400
+
+in vec2 texCoord;
+in vec2 texCoordMove;
+in vec3 normal;
+in vec3 tang;
+in vec3 binorm;
+in vec3 viewDirection;
+
+out vec4 outputColor;
+
+uniform sampler2D texturaAguaColor;
+uniform sampler2D texturaAguaNormal;
+uniform sampler2D texturaAguaSpec;
+
+uniform vec3 lightDirection;
+uniform vec4 diffuseLightColor;
+
+void main(void)
+{
+	vec4 textureAguaColor = texture(texturaAguaColor, texCoordMove);
+	vec4 textureAguaNormal = texture(texturaAguaNormal, texCoordMove);
+	vec4 textureAguaSpec = texture(texturaAguaSpec, texCoordMove);
+
+	vec3 lightDir = -lightDirection;
+
+	// matriz tbn
+	mat3 tbn = mat3(tang, binorm, normal);
+
+	textureAguaNormal = 2.0 * textureAguaNormal - 1.0f;
+	vec3 bumpNormal = tbn * vec3(textureAguaNormal);
+
+	// aportacion ambiental
+	float factorAmbiental = 0.6f;
+	vec4 aportAmbiental = factorAmbiental * textureAguaColor * diffuseLightColor;
+
+	// aportacion difusa (factor de la ley de lambert)
+	float factorDifusa = 0.6f;
+	float fall = clamp(dot(lightDir, bumpNormal), 0.0f, 1.0f);
+	vec4 aportDifusa = factorDifusa * textureAguaColor * fall * diffuseLightColor;
+
+	// aportacion specular
+	float factorSpec = 2.0f;
+	float factBrillantez = 10;
+	vec3 reflejo = normalize(reflect(-lightDirection, bumpNormal));
+	float spec = pow(max(dot(reflejo, -viewDirection), 0.0), factBrillantez);
+	vec4 aportSpecular = textureAguaSpec * diffuseLightColor * factorSpec * spec;
+
+	vec4 color = textureAguaColor * (aportAmbiental + aportSpecular);
+	outputColor = vec4(color.rgb, 0.3f);
+}

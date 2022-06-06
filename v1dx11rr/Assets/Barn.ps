@@ -1,0 +1,85 @@
+////////////////////////////////////////////////////////////////////////////////
+// Filename: Barn.ps
+////////////////////////////////////////////////////////////////////////////////
+#version 400
+
+// INPUT VARIABLES 
+in vec2 texCoord;
+in vec3 normal;
+in vec3 tangente;
+in vec3 binormal;
+in vec3 viewDirection;
+
+// OUTPUT VARIABLES 
+out vec4 outputColor;
+
+// UNIFORM VARIABLES 
+uniform sampler2D texturaColor;
+uniform sampler2D texturaNormal;
+uniform sampler2D texturaSpecular;
+
+uniform int contieneNormal;
+uniform int contieneSpecular;
+
+uniform vec3 lightDirection;
+uniform vec4 diffuseLightColor;
+
+// Pixel Shader
+void main(void)
+{
+	// declaramos variables
+	vec3 bumpNormal;
+
+	// cargamos texturas
+	vec4 texColor = texture(texturaColor, texCoord);	
+	vec4 texNormal = vec4(1.0f, 0.0f, 1.0f, 1.0f);
+	vec4 texSpecular = vec4(1.0f, 1.0f, 1.0f, 1.0f);
+
+	// ajustamos la direccion de la luz (invertimos la direccion de la luz para calculos)
+	vec3 lightDir = -lightDirection;
+
+	// aportacion ambiental
+	float factorAmbiental = 0.5f;
+	vec4 aportAmbiental = factorAmbiental * texColor * diffuseLightColor;
+
+	// si tiene normal, hacemos lo necesario para obtener la aportacion difusa
+	float factorDifusa;
+	float fall;
+
+	if (contieneNormal == 1)
+	{
+		texNormal = texture(texturaNormal, texCoord);
+		mat3 tbn = mat3(tangente, binormal, normal);
+		texNormal = 2.0 * texNormal - 1.0f;
+		// texNormal.y = texNormal.y * -1;
+		bumpNormal = tbn * vec3(texNormal);
+		fall = clamp(dot(lightDir, bumpNormal), 0.0f, 1.0f);
+	}
+	else
+	{
+		fall = clamp(dot(lightDir, normal), 0.0f, 1.0f);
+	}
+
+	// aportacion difusa (factor de la ley de lambert)
+	factorDifusa = 1.0f;
+	vec4 aportDifusa = factorDifusa * texColor * fall * diffuseLightColor;
+	
+	// si tiene specular, hacemos lo necesario para obtener la aportacion specular
+	vec4 aportSpecular = vec4(0.0f, 0.0f, 0.0f, 0.0f);
+
+	if (contieneSpecular == 1)
+	{
+		float factorSpec = 1.0f;
+		float factShininness = 100;
+
+		// texSpecular = texture(texturaSpecular, texCoord);	
+		texSpecular = vec4(1.0f, 1.0f, 1.0f, 1.0f);
+
+		vec3 reflejo = normalize(reflect(-lightDirection, bumpNormal));
+		float spec = pow(max(dot(reflejo, -viewDirection), 0.0), factShininness);
+		aportSpecular = texSpecular * diffuseLightColor * factorSpec * spec;
+	}
+
+	outputColor = texColor * (aportAmbiental + aportDifusa + aportSpecular);
+	// outputColor = texColor;
+}
