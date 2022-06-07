@@ -12,8 +12,9 @@ C:\Users\Usuario.Equipo-PC\Desktop\Gráficas Computacionales 2\PlantillaTexto (1
 C:\Users\Usuario.Equipo-PC\Desktop\Gráficas Computacionales 2\PlantillaTexto (1)\TerrenoSkyBillModGC2Texto\x64\Debug\GUI.cso
 C:\Users\Usuario.Equipo-PC\Desktop\Gráficas Computacionales 2\PlantillaTexto (1)\TerrenoSkyBillModGC2Texto\x64\Debug\Modelo.cso
 C:\Users\Usuario.Equipo-PC\Desktop\Gráficas Computacionales 2\PlantillaTexto (1)\TerrenoSkyBillModGC2Texto\x64\Debug\Text.cso
+C:\Users\Usuario.Equipo-PC\Documents\GitHub\PlantillaTexto (1)\TerrenoSkyBillModGC2Texto\x64\Debug\Agua.cso
 C:\Users\Usuario.Equipo-PC\Documents\GitHub\PlantillaTexto (1)\TerrenoSkyBillModGC2Texto\x64\Debug\Billboard.cso
 C:\Users\Usuario.Equipo-PC\Documents\GitHub\PlantillaTexto (1)\TerrenoSkyBillModGC2Texto\x64\Debug\GUI.cso
 C:\Users\Usuario.Equipo-PC\Documents\GitHub\PlantillaTexto (1)\TerrenoSkyBillModGC2Texto\x64\Debug\Modelo.cso
+C:\Users\Usuario.Equipo-PC\Documents\GitHub\PlantillaTexto (1)\TerrenoSkyBillModGC2Texto\x64\Debug\Silo.cso
 C:\Users\Usuario.Equipo-PC\Documents\GitHub\PlantillaTexto (1)\TerrenoSkyBillModGC2Texto\x64\Debug\Text.cso
-C:\Users\Usuario.Equipo-PC\Documents\GitHub\PlantillaTexto (1)\TerrenoSkyBillModGC2Texto\x64\Debug\Agua.cso

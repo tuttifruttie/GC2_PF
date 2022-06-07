@@ -13,6 +13,7 @@
 #include "GUI.h"
 #include "Text.h"
 #include "Agua.h"
+#include "Silo.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <sstream>
@@ -90,7 +91,8 @@ public:
 	BillboardRR* pino3;
 	BillboardRR* pino4;
 	///resto de modelos/////
-	ModeloRR* silo;
+	
+	Silo* silo;
 	ModeloRR* madera;
 	ModeloRR* molino;
 	ModeloRR* casa;
@@ -231,7 +233,7 @@ public:
 		*/
 
 		//OTROS MODELOS
-		silo = new ModeloRR(d3dDevice, d3dContext, "Assets/Silo.obj", L"Assets/Silo_color.jpg", L"Assets/Silo_specular.png", L"Assets/Silo_normal.png", -100, 20);
+		silo = new Silo(d3dDevice, d3dContext, "Assets/Silo.obj", L"Assets/Silo_color.jpg", L"Assets/Silo_specular.png", L"Assets/Silo_normal.png", -100, 20);
 		madera = new ModeloRR(d3dDevice, d3dContext, "Assets/madera.obj", L"Assets/wood_color.png", L"Assets/wood_specular.png", L"Assets/wood_normal.png", 80, -35);
 		molino = new ModeloRR(d3dDevice, d3dContext, "Assets/molino.obj", L"Assets/Windmill_color.jpg", L"Assets/Windmill_specular.jpg", L"Assets/Windmill_normal.jpg", 90, 20);
 		casa = new ModeloRR(d3dDevice, d3dContext, "Assets/cottage.obj", L"Assets/cottage_diffuse.png", L"Assets/cottage_specular3.png", L"Assets/cottage_normal.png", 90, -20);

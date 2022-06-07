@@ -54,6 +54,9 @@
     <ClInclude Include="resource.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
+    <ClInclude Include="Silo.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Shader.fx">
@@ -90,6 +93,9 @@
       <Filter>Archivos de código fuente</Filter>
     </FxCompile>
     <FxCompile Include="Agua.fx">
+      <Filter>Archivos de código fuente</Filter>
+    </FxCompile>
+    <FxCompile Include="Silo.fx">
       <Filter>Archivos de código fuente</Filter>
     </FxCompile>
   </ItemGroup>
