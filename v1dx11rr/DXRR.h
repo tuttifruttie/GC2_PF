@@ -233,19 +233,19 @@ public:
 		//OTROS MODELOS
 		silo = new ModeloRR(d3dDevice, d3dContext, "Assets/Silo.obj", L"Assets/Silo_color.jpg", L"Assets/Silo_specular.png", L"Assets/Silo_normal.png", -100, 20);
 		madera = new ModeloRR(d3dDevice, d3dContext, "Assets/madera.obj", L"Assets/wood_color.png", L"Assets/wood_specular.png", L"Assets/wood_normal.png", 80, -35);
-		molino = new ModeloRR(d3dDevice, d3dContext, "Assets/molino.obj", L"Assets/Windmill_color.jpg", L"Assets/Windmill_specular.jpg", L"Assets/Windmill_normal.jpg", 90, 25);
+		molino = new ModeloRR(d3dDevice, d3dContext, "Assets/molino.obj", L"Assets/Windmill_color.jpg", L"Assets/Windmill_specular.jpg", L"Assets/Windmill_normal.jpg", 90, 20);
 		casa = new ModeloRR(d3dDevice, d3dContext, "Assets/cottage.obj", L"Assets/cottage_diffuse.png", L"Assets/cottage_specular3.png", L"Assets/cottage_normal.png", 90, -20);
 		casa2 = new ModeloRR(d3dDevice, d3dContext, "Assets/cottage.obj", L"Assets/cottage_diffuse.png", L"Assets/cottage_specular3.png", L"Assets/cottage_normal.png", -100, 50);
 		granero = new ModeloRR(d3dDevice, d3dContext, "Assets/barn.obj", L"Assets/barn_color.jpg", L"Assets/barn_specular6.png", L"Assets/barn_normal2.png", 90, 50);
 		colisionterreno = new ModeloRR(d3dDevice, d3dContext, "Assets/caja.obj", L"Assets/caja.jpg", L"Assets/CajaS.png", L"Assets/CajaN.png", 0, 0);
 		torremadera = new ModeloRR(d3dDevice, d3dContext, "Assets/torreMadera.obj", L"Assets/Wood_Tower_color.jpg", L"Assets/Wood_Tower_specular.png", L"Assets/Wood_Tower_normal.jpg", -50, -125);
-		zanahoria1 = new ModeloRR(d3dDevice, d3dContext, "Assets/Carrot1.obj", L"Assets/carrot_albedo2.jpg", L"Assets/carrot_opacity.jpg", L"Assets/carrot_normal.jpg", 8, 80);
-		zanahoria2 = new ModeloRR(d3dDevice, d3dContext, "Assets/Carrot1.obj", L"Assets/carrot_albedo2.jpg", L"Assets/carrot_opacity.jpg", L"Assets/carrot_normal.jpg", 2, 20);
-		zanahoria3 = new ModeloRR(d3dDevice, d3dContext, "Assets/Carrot1.obj", L"Assets/carrot_albedo2.jpg", L"Assets/carrot_opacity.jpg", L"Assets/carrot_normal.jpg", 3, 30);
-		zanahoria4 = new ModeloRR(d3dDevice, d3dContext, "Assets/Carrot1.obj", L"Assets/carrot_albedo2.jpg", L"Assets/carrot_opacity.jpg", L"Assets/carrot_normal.jpg", 4, 40);
-		zanahoria5 = new ModeloRR(d3dDevice, d3dContext, "Assets/Carrot1.obj", L"Assets/carrot_albedo2.jpg", L"Assets/carrot_opacity.jpg", L"Assets/carrot_normal.jpg", 5, 50);
-		zanahoria6 = new ModeloRR(d3dDevice, d3dContext, "Assets/Carrot1.obj", L"Assets/carrot_albedo2.jpg", L"Assets/carrot_opacity.jpg", L"Assets/carrot_normal.jpg", 6, 60);
-		zanahoria7 = new ModeloRR(d3dDevice, d3dContext, "Assets/Carrot1.obj", L"Assets/carrot_albedo2.jpg", L"Assets/carrot_opacity.jpg", L"Assets/carrot_normal.jpg", 7, 70);
+		zanahoria1 = new ModeloRR(d3dDevice, d3dContext, "Assets/Carrot1.obj", L"Assets/carrot_albedo2.jpg", L"Assets/carrot_opacity.jpg", L"Assets/carrot_normal.jpg", 10, 100);
+		zanahoria2 = new ModeloRR(d3dDevice, d3dContext, "Assets/Carrot1.obj", L"Assets/carrot_albedo2.jpg", L"Assets/carrot_opacity.jpg", L"Assets/carrot_normal.jpg", 10, -75);
+		zanahoria3 = new ModeloRR(d3dDevice, d3dContext, "Assets/Carrot1.obj", L"Assets/carrot_albedo2.jpg", L"Assets/carrot_opacity.jpg", L"Assets/carrot_normal.jpg", 80, -40);
+		zanahoria4 = new ModeloRR(d3dDevice, d3dContext, "Assets/Carrot1.obj", L"Assets/carrot_albedo2.jpg", L"Assets/carrot_opacity.jpg", L"Assets/carrot_normal.jpg", 44, 60);
+		zanahoria5 = new ModeloRR(d3dDevice, d3dContext, "Assets/Carrot1.obj", L"Assets/carrot_albedo2.jpg", L"Assets/carrot_opacity.jpg", L"Assets/carrot_normal.jpg", -5, -5);
+		zanahoria6 = new ModeloRR(d3dDevice, d3dContext, "Assets/Carrot1.obj", L"Assets/carrot_albedo2.jpg", L"Assets/carrot_opacity.jpg", L"Assets/carrot_normal.jpg", -90, -90);
+		zanahoria7 = new ModeloRR(d3dDevice, d3dContext, "Assets/Carrot1.obj", L"Assets/carrot_albedo2.jpg", L"Assets/carrot_opacity.jpg", L"Assets/carrot_normal.jpg", -130, 35);
 		caballo = new ModeloRR(d3dDevice, d3dContext, "Assets/caballo3.obj", L"Assets/caballo_textura3.jpg", L"Assets/caballo_specular.jpg", L"Assets/caballo_normal.jpg", 55, -15);
 
 
@@ -482,7 +482,7 @@ public:
 
 		//Colisiones
 
-		if (isPointInsideSphere(camara->getPos(), silo->getSphere(25))) {
+		if (isPointInsideSphere(camara->getPos(), silo->getSphere(15))) {
 
 			Csilobool = false;
 
@@ -597,7 +597,7 @@ public:
 		}
 
 		//Colision con orillas
-		if (!(isPointInsideSphere(camara->getPos(), colisionterreno->getSphere(148)))) {
+		if (!(isPointInsideSphere(camara->getPos(), colisionterreno->getSphere(150)))) {
 
 			colisionorilla = false;
 
