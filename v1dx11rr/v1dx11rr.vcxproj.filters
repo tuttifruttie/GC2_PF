@@ -89,6 +89,9 @@
     <FxCompile Include="Text.fx">
       <Filter>Archivos de código fuente</Filter>
     </FxCompile>
+    <FxCompile Include="Agua.fx">
+      <Filter>Archivos de código fuente</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="TerrenoSkyBill.rc">

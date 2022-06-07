@@ -178,6 +178,7 @@
     <Text Include="SkyDome.fx" />
   </ItemGroup>
   <ItemGroup>
+    <FxCompile Include="Agua.fx" />
     <FxCompile Include="Billboard.hlsl" />
     <FxCompile Include="GUI.fx">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Effect</ShaderType>
