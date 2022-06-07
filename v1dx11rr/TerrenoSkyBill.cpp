@@ -206,13 +206,13 @@ LRESULT CALLBACK WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPara
                 dxrr->vel *= 2;
             }
 
-            //if (keyboardData[DIK_O] & 0x80) {
-           //    dxrr->tipoCamara = 3;
-           //}
+            if (keyboardData[DIK_2] & 0x80) {
+               dxrr->perscamara = 2;
+           }
 
-           //if (keyboardData[DIK_P] & 0x80) {
-           //    dxrr->tipoCamara = 1;
-           //}
+           if (keyboardData[DIK_1] & 0x80) {
+               dxrr->perscamara = 1;
+           }
 
 
             DIMOUSESTATE mouseData;

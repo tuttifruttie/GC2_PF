@@ -64,11 +64,11 @@ public:
 		//copiamos el device y el device context a la clase terreno
 		d3dContext = D3DContext;
 		d3dDevice = D3DDevice;
-		//este es el ancho y el alto del terreno en su escala
+		//ancho y alto
 		this->ancho = ancho;
 		this->alto = alto;
-		//aqui cargamos las texturas de alturas y el cesped
-		CargaParametros(L"Water_001_COLOR.jpg", L"noSpecMap.jpg",L"aguaS.png ", 100.0f);
+		//difusa, altura, rgb
+		CargaParametros(L"Assets/Water_001_COLOR.jpg", L"Assets/noSpecMap.jpg",L"Assets/specular_agua.jpg ", 100.0f);
 	}
 
 	~Agua()
@@ -247,9 +247,9 @@ public:
 		estableceIndices();
 		//crea los accesos de las texturas para los shaders 
 		d3dResult = D3DX11CreateShaderResourceViewFromFile( d3dDevice, diffuseTex, 0, 0, &colorMap, 0 );
-		d3dResult = D3DX11CreateShaderResourceViewFromFile( d3dDevice, L"agua.jpg", 0, 0, &colorMap2, 0 );
-		d3dResult = D3DX11CreateShaderResourceViewFromFile(d3dDevice, L"agua.jpg", 0, 0, &colorMap3, 0);
-		d3dResult = D3DX11CreateShaderResourceViewFromFile( d3dDevice, L"agua.jpg", 0, 0, &blendMap, 0 );
+		d3dResult = D3DX11CreateShaderResourceViewFromFile( d3dDevice, L"Assets/Water_001_COLOR.jpg", 0, 0, &colorMap2, 0 );
+		d3dResult = D3DX11CreateShaderResourceViewFromFile(d3dDevice, L"Assets/Water_001_COLOR.jpg", 0, 0, &colorMap3, 0);
+		d3dResult = D3DX11CreateShaderResourceViewFromFile( d3dDevice, L"Assets/Water_001_COLOR.jpg", 0, 0, &blendMap, 0 );
 		
 
 		if( FAILED( d3dResult ) )

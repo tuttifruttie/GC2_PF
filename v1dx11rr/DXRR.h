@@ -12,6 +12,7 @@
 #include "XACT3Util.h"
 #include "GUI.h"
 #include "Text.h"
+#include "Agua.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <sstream>
@@ -46,6 +47,8 @@ public:
 	float rotCam;
 
 	TerrenoRR *terreno;
+	Agua* agua;
+
 	SkyDome *skydome;
 	BillboardRR *billboard;
 	BillboardRR* arbol;
@@ -123,6 +126,7 @@ public:
 	float izqder;
 	float arriaba;
 	float vel;
+	int perscamara;
 	float velRightLeft;
 	bool breakpoint;
 	vector2 uv1[32];
@@ -171,17 +175,21 @@ public:
 		d3dContext = 0;
 		swapChain = 0;
 		backBufferTarget = 0;
+
 		IniciaD3D(hWnd);
 		izqder = 0;
 		arriaba = 0;
 		billCargaFuego();
 		rotCam = 0.0;
+
 		camara = new Camara(D3DXVECTOR3(0,80,6), D3DXVECTOR3(0,80,0), D3DXVECTOR3(0,1,0), Ancho, Alto);
 		terreno = new TerrenoRR(300, 300, d3dDevice, d3dContext);
+		agua = new Agua(200, 200, d3dDevice, d3dContext);
+
 		skydome = new SkyDome(32, 32, 100.0f, &d3dDevice, &d3dContext, L"SkyDome.png");
 
-		billboard = new BillboardRR(L"Assets/Billboards/fuego-anim.png",L"Assets/Billboards/fuego-anim-normal.png", d3dDevice, d3dContext, 5);
-		arbol = new BillboardRR(L"Assets/Billboards/tree.png", L"Assets/Billboards/tree_normal.png", d3dDevice, d3dContext, 1);
+		//billboard = new BillboardRR(L"Assets/Billboards/fuego-anim.png",L"Assets/Billboards/fuego-anim-normal.png", d3dDevice, d3dContext, 5);
+		//arbol = new BillboardRR(L"Assets/Billboards/tree.png", L"Assets/Billboards/tree_normal.png", d3dDevice, d3dContext, 1);
 
 		vaca = new BillboardRR(L"Assets/vaca.png", L"Assets/vaca.png", d3dDevice, d3dContext, 5);
 		cerdo = new BillboardRR(L"Assets/cerdo.png", L"Assets/cerdo.png", d3dDevice, d3dContext, 3);
@@ -214,13 +222,14 @@ public:
 		
 
 		//MODELOS
-		model = new ModeloRR(d3dDevice, d3dContext, "Assets/Cofre/cofre.obj", L"Assets/Cofre/Cofre-color.png", L"Assets/Cofre/Cofre-spec.png", L"Assets/Gema/emerald.jpg", 0, 0);
+		/*model = new ModeloRR(d3dDevice, d3dContext, "Assets/Cofre/cofre.obj", L"Assets/Cofre/Cofre-color.png", L"Assets/Cofre/Cofre-spec.png", L"Assets/Gema/emerald.jpg", 0, 0);
 		gema1 = new ModeloRR(d3dDevice, d3dContext, "Assets/Gema/emerald.obj", L"Assets/Gema/emerald.jpg", L"Assets/Gema/emerald.jpg", L"Assets/Gema/emerald.jpg", 0, 0);
 		gema2 = new ModeloRR(d3dDevice, d3dContext, "Assets/Gema/emerald.obj", L"Assets/Gema/emerald.jpg", L"Assets/Gema/emerald.jpg", L"Assets/Gema/emerald.jpg", 0, 0);
 		gema3 = new ModeloRR(d3dDevice, d3dContext, "Assets/Gema/emerald.obj", L"Assets/Gema/emerald.jpg", L"Assets/Gema/emerald.jpg", L"Assets/Gema/emerald.jpg", 0, 0);
 		gema4 = new ModeloRR(d3dDevice, d3dContext, "Assets/Gema/emerald.obj", L"Assets/Gema/emerald.jpg", L"Assets/Gema/emerald.jpg", L"Assets/Gema/emerald.jpg", 0, 0);
 		gema5 = new ModeloRR(d3dDevice, d3dContext, "Assets/Gema/emerald.obj", L"Assets/Gema/emerald.jpg", L"Assets/Gema/emerald.jpg", L"Assets/Gema/emerald.jpg", 0, 0);
-		
+		*/
+
 		//OTROS MODELOS
 		silo = new ModeloRR(d3dDevice, d3dContext, "Assets/Silo.obj", L"Assets/Silo_color.jpg", L"Assets/Silo_specular.png", L"Assets/Silo_normal.png", -100, 20);
 		madera = new ModeloRR(d3dDevice, d3dContext, "Assets/madera.obj", L"Assets/wood_color.png", L"Assets/wood_specular.png", L"Assets/wood_normal.png", 80, -35);
@@ -446,9 +455,9 @@ public:
 		d3dContext->ClearDepthStencilView( depthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0 );
 
 		camara->posCam.y = terreno->Superficie(camara->posCam.x, camara->posCam.z) + 10;
-		//camara->posCam3P.y = terreno->Superficie(camara->posCam.x, camara->posCam.z) + 4;
+		camara->posCam3Pers.y = terreno->Superficie(camara->posCam.x, camara->posCam.z)+15;
 
-		camara->UpdateCam(vel, velRightLeft, arriaba, izqder);
+		camara->UpdateCam(vel, velRightLeft, arriaba, izqder, perscamara);
 
 		//MENSAJE DE VICTORIA Y DERROTA
 		if (zanahorias ==0 )
@@ -604,12 +613,14 @@ public:
 		TurnOnDepth();
 
 		terreno->Draw(camara->vista, camara->proyeccion);
+		agua->Draw(camara->vista , camara->proyeccion  );
+
 		
-		billboard->Draw(camara->vista, camara->proyeccion, camara->posCam,
+		/*billboard->Draw(camara->vista, camara->proyeccion, camara->posCam,
 			-11, -78, 4, 5, uv1, uv2, uv3, uv4, frameBillboard, true);
 
 		arbol->Draw(camara->vista, camara->proyeccion, camara->posCam,
-			-11, 78, terreno->Superficie(-11, 78), 5, uv1, uv2, uv3, uv4, frameBillboard, false);
+			-11, 78, terreno->Superficie(-11, 78), 5, uv1, uv2, uv3, uv4, frameBillboard, false);*/
 
 		//OTROS BILLBOARDS
 
@@ -667,42 +678,47 @@ public:
 			50, -130, 8, 15, uv1, uv2, uv3, uv4, frameBillboard, false);
 
 
-		model->Draw(camara->vista, camara->proyeccion, terreno->Superficie(10, 20), camara->posCam, 10.0f, 0, 'A', 1);
-		//Gemas
-		gema1->setPos(10, 10);
-		gema1->Draw(camara->vista, camara->proyeccion, terreno->Superficie(0, 0) + 2.5 + floatGem, camara->posCam, 10.0f, D3DX_PI / 2 + rotGem, 'Y', 1);
+		//model->Draw(camara->vista, camara->proyeccion, terreno->Superficie(10, 20), camara->posCam, 10.0f, 0, 'A', 1);
+		////Gemas
+		//gema1->setPos(10, 10);
+		//gema1->Draw(camara->vista, camara->proyeccion, terreno->Superficie(0, 0) + 2.5 + floatGem, camara->posCam, 10.0f, D3DX_PI / 2 + rotGem, 'Y', 1);
 
-		gema2->setPos(20, 10);
-		gema2->Draw(camara->vista, camara->proyeccion, terreno->Superficie(0, 0) + 2.5 - floatGem, camara->posCam, 10.0f, D3DX_PI / 2 + -rotGem, 'Y', 1);
+		//gema2->setPos(20, 10);
+		//gema2->Draw(camara->vista, camara->proyeccion, terreno->Superficie(0, 0) + 2.5 - floatGem, camara->posCam, 10.0f, D3DX_PI / 2 + -rotGem, 'Y', 1);
 
-		gema3->setPos(30, 10);
-		gema3->Draw(camara->vista, camara->proyeccion, terreno->Superficie(0, 0) + 2.5 - floatGem, camara->posCam, 10.0f, D3DX_PI / 2 + rotGem, 'Y', 1);
+		//gema3->setPos(30, 10);
+		//gema3->Draw(camara->vista, camara->proyeccion, terreno->Superficie(0, 0) + 2.5 - floatGem, camara->posCam, 10.0f, D3DX_PI / 2 + rotGem, 'Y', 1);
 
-		gema4->setPos(40, 10);
-		gema4->Draw(camara->vista, camara->proyeccion, terreno->Superficie(0, 0) + 2.5 + floatGem, camara->posCam, 10.0f, D3DX_PI / 2 + -rotGem, 'Y', 1);
+		//gema4->setPos(40, 10);
+		//gema4->Draw(camara->vista, camara->proyeccion, terreno->Superficie(0, 0) + 2.5 + floatGem, camara->posCam, 10.0f, D3DX_PI / 2 + -rotGem, 'Y', 1);
 
-		gema5->setPos(50, 10);
-		gema5->Draw(camara->vista, camara->proyeccion, terreno->Superficie(0, 0) + 2.5 - floatGem, camara->posCam, 10.0f, D3DX_PI / 2 + -rotGem, 'Y', 1);
+		//gema5->setPos(50, 10);
+		//gema5->Draw(camara->vista, camara->proyeccion, terreno->Superficie(0, 0) + 2.5 - floatGem, camara->posCam, 10.0f, D3DX_PI / 2 + -rotGem, 'Y', 1);
 
 		//OTROS MODELOS 
-		silo->Draw(camara->vista, camara->proyeccion, terreno->Superficie(0, 0), camara->posCam, 10.0f, 0, 'A', 5.5);
-		madera->Draw(camara->vista, camara->proyeccion, terreno->Superficie(0, 0), camara->posCam, 10.0f, 0, 'A', 3);
-		molino->Draw(camara->vista, camara->proyeccion, terreno->Superficie(0, 0), camara->posCam, 10.0f, 0, 'A', 5);
-		casa->Draw(camara->vista, camara->proyeccion, terreno->Superficie(0, 0), camara->posCam, 10.0f, 0, 'A', 4);
-		casa2->Draw(camara->vista, camara->proyeccion, terreno->Superficie(0, 0), camara->posCam, 10.0f, 0, 'A', 4);
-		granero->Draw(camara->vista, camara->proyeccion, terreno->Superficie(0, 0), camara->posCam, 10.0f, 0, 'A', 4);
-		torremadera->Draw(camara->vista, camara->proyeccion, terreno->Superficie(0, 0), camara->posCam, 10.0f, 0, 'A', 3);
-		zanahoria1->Draw(camara->vista, camara->proyeccion, terreno->Superficie(100, 20) + 3.5 + floatGem, camara->posCam, 10.0f, 0, 'A', 1.5);
-		zanahoria2->Draw(camara->vista, camara->proyeccion, terreno->Superficie(100, 20) + 3.5 - floatGem, camara->posCam, 10.0f, 0, 'A', 1.5);
-		zanahoria3->Draw(camara->vista, camara->proyeccion, terreno->Superficie(100, 20) + 3.5 + floatGem, camara->posCam, 10.0f, 0, 'A', 1.5);
-		zanahoria4->Draw(camara->vista, camara->proyeccion, terreno->Superficie(100, 20) + 3.5 + floatGem, camara->posCam, 10.0f, 0, 'A', 1.5);
-		zanahoria5->Draw(camara->vista, camara->proyeccion, terreno->Superficie(100, 20) + 3.5 - floatGem, camara->posCam, 10.0f, 0, 'A', 1.5);
-		zanahoria6->Draw(camara->vista, camara->proyeccion, terreno->Superficie(100, 20) + 3.5 - floatGem, camara->posCam, 10.0f, 0, 'A', 1.5);
-		zanahoria7->Draw(camara->vista, camara->proyeccion, terreno->Superficie(100, 20) + 3.5 + floatGem, camara->posCam, 10.0f, 0, 'A', 1.5);
+		silo->Draw(camara->vista, camara->proyeccion, terreno->Superficie(0, 0), camara->posCam, 10.0f, 0, 'A', 5.5, false, perscamara);
+		madera->Draw(camara->vista, camara->proyeccion, terreno->Superficie(0, 0), camara->posCam, 10.0f, 0, 'A', 3, false, perscamara);
+		molino->Draw(camara->vista, camara->proyeccion, terreno->Superficie(0, 0), camara->posCam, 10.0f, 0, 'A', 5, false, perscamara);
+		casa->Draw(camara->vista, camara->proyeccion, terreno->Superficie(0, 0), camara->posCam, 10.0f, 0, 'A', 4, false, perscamara);
+		casa2->Draw(camara->vista, camara->proyeccion, terreno->Superficie(0, 0), camara->posCam, 10.0f, 0, 'A', 4, false, perscamara);
+		granero->Draw(camara->vista, camara->proyeccion, terreno->Superficie(0, 0), camara->posCam, 10.0f, 0, 'A', 4, false, perscamara);
+		torremadera->Draw(camara->vista, camara->proyeccion, terreno->Superficie(0, 0), camara->posCam, 10.0f, 0, 'A', 3, false, perscamara);
+		zanahoria1->Draw(camara->vista, camara->proyeccion, terreno->Superficie(100, 20) + 3.5 + floatGem, camara->posCam, 10.0f, 0, 'A', 1.5, false, perscamara);
+		zanahoria2->Draw(camara->vista, camara->proyeccion, terreno->Superficie(100, 20) + 3.5 - floatGem, camara->posCam, 10.0f, 0, 'A', 1.5, false, perscamara);
+		zanahoria3->Draw(camara->vista, camara->proyeccion, terreno->Superficie(100, 20) + 3.5 + floatGem, camara->posCam, 10.0f, 0, 'A', 1.5, false, perscamara);
+		zanahoria4->Draw(camara->vista, camara->proyeccion, terreno->Superficie(100, 20) + 3.5 + floatGem, camara->posCam, 10.0f, 0, 'A', 1.5, false, perscamara);
+		zanahoria5->Draw(camara->vista, camara->proyeccion, terreno->Superficie(100, 20) + 3.5 - floatGem, camara->posCam, 10.0f, 0, 'A', 1.5, false, perscamara);
+		zanahoria6->Draw(camara->vista, camara->proyeccion, terreno->Superficie(100, 20) + 3.5 - floatGem, camara->posCam, 10.0f, 0, 'A', 1.5, false, perscamara);
+		zanahoria7->Draw(camara->vista, camara->proyeccion, terreno->Superficie(100, 20) + 3.5 + floatGem, camara->posCam, 10.0f, 0, 'A', 1.5, false, perscamara);
 		
+		//caballo->setPosX(camara->hdveo.x);
+		//caballo->setPosZ(camara->hdveo.z);
 		caballo->setPosX(camara->hdveo.x);
-		caballo->setPosZ(camara->hdveo.z);
-		caballo->Draw(camara->vista, camara->proyeccion, terreno->Superficie(caballo->getPosX(), caballo->getPosZ()) , camara->posCam, 10.0f, rotCam + 80, 'Y', 1.5);
+		caballo->setPosZ(camara->hdveo.z );
+
+		////PRIMERA PERSONA
+		caballo->Draw(camara->vista, camara->proyeccion, terreno->Superficie(caballo->getPosX(), caballo->getPosZ())  , camara->posCam, 10.0f, rotCam + 80, 'Y', 1.5, true, perscamara);
+
 
 		//GUI
 		//vida->Draw(-0.8, -0.8);

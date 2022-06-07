@@ -2,21 +2,21 @@
 <Project>
   <ProjectOutputs>
     <ProjectOutput>
-      <FullPath>C:\Users\Usuario.Equipo-PC\Desktop\Gráficas Computacionales 2\PlantillaTexto (1)\TerrenoSkyBillModGC2Texto\x64\Debug\TerrenoSkyBill.exe</FullPath>
+      <FullPath>C:\Users\Usuario.Equipo-PC\Documents\GitHub\PlantillaTexto (1)\TerrenoSkyBillModGC2Texto\x64\Debug\TerrenoSkyBill.exe</FullPath>
     </ProjectOutput>
   </ProjectOutputs>
   <ContentFiles>
     <ContentFile>
-      <FullPath>C:\Users\Usuario.Equipo-PC\Desktop\Gráficas Computacionales 2\PlantillaTexto (1)\TerrenoSkyBillModGC2Texto\x64\Debug\Billboard.cso</FullPath>
+      <FullPath>C:\Users\Usuario.Equipo-PC\Documents\GitHub\PlantillaTexto (1)\TerrenoSkyBillModGC2Texto\x64\Debug\Billboard.cso</FullPath>
     </ContentFile>
     <ContentFile>
-      <FullPath>C:\Users\Usuario.Equipo-PC\Desktop\Gráficas Computacionales 2\PlantillaTexto (1)\TerrenoSkyBillModGC2Texto\x64\Debug\GUI.cso</FullPath>
+      <FullPath>C:\Users\Usuario.Equipo-PC\Documents\GitHub\PlantillaTexto (1)\TerrenoSkyBillModGC2Texto\x64\Debug\GUI.cso</FullPath>
     </ContentFile>
     <ContentFile>
-      <FullPath>C:\Users\Usuario.Equipo-PC\Desktop\Gráficas Computacionales 2\PlantillaTexto (1)\TerrenoSkyBillModGC2Texto\x64\Debug\Modelo.cso</FullPath>
+      <FullPath>C:\Users\Usuario.Equipo-PC\Documents\GitHub\PlantillaTexto (1)\TerrenoSkyBillModGC2Texto\x64\Debug\Modelo.cso</FullPath>
     </ContentFile>
     <ContentFile>
-      <FullPath>C:\Users\Usuario.Equipo-PC\Desktop\Gráficas Computacionales 2\PlantillaTexto (1)\TerrenoSkyBillModGC2Texto\x64\Debug\Text.cso</FullPath>
+      <FullPath>C:\Users\Usuario.Equipo-PC\Documents\GitHub\PlantillaTexto (1)\TerrenoSkyBillModGC2Texto\x64\Debug\Text.cso</FullPath>
     </ContentFile>
   </ContentFiles>
   <SatelliteDlls />

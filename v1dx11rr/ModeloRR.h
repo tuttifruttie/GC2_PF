@@ -46,6 +46,7 @@ private:
 
 	ID3D11ShaderResourceView* colorMap;
 	ID3D11ShaderResourceView* specMap;
+	ID3D11ShaderResourceView* normalMap;
 	ID3D11SamplerState* colorMapSampler;
 
 	ID3D11Buffer* viewCB;
@@ -101,7 +102,7 @@ public:
 		posZ = _posZ;
 
 		//aqui cargamos las texturas de alturas y el cesped
-		CargaParametros(ModelPath, colorTexturePath, specularTexturePath);//L"Assets/Tent-Tower/tent_diffuse.jpg"
+		CargaParametros(ModelPath, colorTexturePath, specularTexturePath, normalTexturePath);//L"Assets/Tent-Tower/tent_diffuse.jpg"
 	}
 
 	~ModeloRR()
@@ -158,7 +159,7 @@ public:
 		return true;
 	}
 
-	bool CargaParametros(char* ModelPath, WCHAR* diffuseTex, WCHAR* specularTex)
+	bool CargaParametros(char* ModelPath, WCHAR* diffuseTex, WCHAR* specularTex, WCHAR* normalTex)
 	{
 		HRESULT d3dResult;
 		
@@ -253,6 +254,7 @@ public:
 		//crea los accesos de las texturas para los shaders 
 		d3dResult = D3DX11CreateShaderResourceViewFromFile(d3dDevice, diffuseTex, 0, 0, &colorMap, 0);
 		d3dResult = D3DX11CreateShaderResourceViewFromFile(d3dDevice, specularTex, 0, 0, &specMap, 0);
+		d3dResult = D3DX11CreateShaderResourceViewFromFile(d3dDevice, normalTex, 0, 0, &normalMap, 0);
 		
 		if (FAILED(d3dResult))
 		{
@@ -382,7 +384,7 @@ public:
 
 	}
 
-	void Draw(D3DXMATRIX vista, D3DXMATRIX proyeccion, float ypos, D3DXVECTOR3 posCam, float specForce, float rot, char angle, float scale)
+	void Draw(D3DXMATRIX vista, D3DXMATRIX proyeccion, float ypos, D3DXVECTOR3 posCam, float specForce, float rot, char angle, float scale, bool movCam, int perscamara)
 	{
 		static float rotation = 0.0f;
 		rotation += 0.01;
@@ -410,14 +412,23 @@ public:
 		//pasa lo sbuffers al shader
 		d3dContext->PSSetShaderResources(0, 1, &colorMap);	
 		d3dContext->PSSetShaderResources(1, 1, &specMap);
+		d3dContext->PSSetShaderResources(2, 1, &normalMap);
 
 		d3dContext->PSSetSamplers(0, 1, &colorMapSampler);
 
 		//mueve la camara
+		D3DXMATRIX traslacionDeCamara;
+		if (perscamara == 2) {
+			D3DXMatrixTranslation(&traslacionDeCamara, 0.0, 0.0, 0.0);
+		}
+		else if (perscamara == 1) {
+			D3DXMatrixTranslation(&traslacionDeCamara, 0.0, 0.0, -6.4);
+		}
+
 		D3DXMATRIX rotationMat;
 		D3DXMatrixRotationYawPitchRoll(&rotationMat, 0.0f, 0.0f, 0.0f);
-		D3DXMATRIX translationMat;
-		D3DXMatrixTranslation(&translationMat, posX, ypos, posZ);
+
+
 		if(angle == 'X')
 			D3DXMatrixRotationX(&rotationMat, rot);
 		else if (angle == 'Y')
@@ -426,10 +437,22 @@ public:
 			D3DXMatrixRotationZ(&rotationMat, rot);
 		viewMatrix *= rotationMat;
 
+		D3DXMATRIX translationMat;
+		D3DXMatrixTranslation(&translationMat, posX, ypos, posZ);
+
 		D3DXMATRIX scaleMat;
 		D3DXMatrixScaling(&scaleMat, scale,scale * 1.5,scale);
 
-		D3DXMATRIX worldMat = rotationMat * scaleMat * translationMat;
+		D3DXMATRIX worldMat;
+		if (movCam) {
+			 worldMat = scaleMat*  traslacionDeCamara * rotationMat * translationMat ;
+		}
+		else {
+			worldMat = rotationMat * scaleMat * translationMat;
+		}
+
+
+		//D3DXMATRIX worldMat = rotationMat * scaleMat * translationMat;
 		D3DXMatrixTranspose(&worldMat, &worldMat);
 		//actualiza los buffers del shader
 		d3dContext->UpdateSubresource(worldCB, 0, 0, &worldMat, 0, 0);

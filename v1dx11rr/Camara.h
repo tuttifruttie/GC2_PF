@@ -24,6 +24,7 @@ public:
 	float pos[2];
 
 	D3DXVECTOR3 posCamPast;
+	D3DXVECTOR3 posCam3Pers;
 
 	float* getPos() {
 		pos[0] = posCam.x;
@@ -36,6 +37,11 @@ public:
 	{
 		//posicion de la camara
 		posCam = eye;
+
+		posCam3Pers = eye;
+		posCam.z += 35;
+
+
 		//a donde ve
 		hdveo = target;
 		refUp = up;
@@ -60,7 +66,7 @@ public:
 		
 	}
 
-	D3DXMATRIX UpdateCam(float vel, float velRightLeft, float arriaba, float izqder)
+	D3DXMATRIX UpdateCam(float vel, float velRightLeft, float arriaba, float izqder, int perscamara)
 	{
 		posCamPast = posCam;
 
@@ -98,9 +104,16 @@ public:
 		//ajustamos la matriz de vista con lo obtenido
 		//refFront[1] = 5;
 		posCam += refFront * vel/10.0;
+		posCam3Pers += refFront * vel / 10.0;
 
-		hdveo = posCam + refFront;
-		D3DXMatrixLookAtLH(&vista, &posCam, &hdveo, &refUp);
+		if (perscamara == 2) {
+			hdveo = posCam + refFront;
+			D3DXMatrixLookAtLH(&vista, &posCam, &hdveo, &refUp);
+		}
+		else if (perscamara == 1) {
+			hdveo = posCam3Pers + refFront;
+			D3DXMatrixLookAtLH(&vista, &posCam3Pers, &hdveo, &refUp);
+		}
 
 		D3DXMatrixTranspose( &vista, &vista );
 		return vista;
